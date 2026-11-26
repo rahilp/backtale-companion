@@ -1,3 +1,36 @@
+# ON HOLD (owner's instruction, 2026-11-26): no work on the companion app until the lead sends "RESUME"
+
+## Where things are
+
+- `claude/ui-v2` (head 2a39508) is the working branch and the base for everything. It holds, on top of the redesign and the macOS capture work:
+  the frosted-glass UI with the bkt mark and icon, the one Connect screen (paste a connection code or open the
+  `backtale-companion://connect?c=...` link), the Backtale sending library (`src-tauri/backtale-client`: disk buffer, batches, resume,
+  junk filter, sign-in as a person kept for later), the plain server messages, the `small` default model, an engine check inside the
+  built app plus a macOS 26 check, and the rolling prerelease `build-latest` published by the build on each green push of that branch.
+- `build-latest` (prerelease) holds the last published build (098680f). Later pushes to `claude/ui-v2` (up to 2a39508) may or may not have finished
+  building when the hold started; nothing was changed after that.
+- Other branches left as they were: `claude/macos-build`, `claude/ui-redesign`, `claude/macos-capture`, `claude/backtale-connect`, `claude/backtale-client`,
+  `claude/session-notes` (this file), `bench/models` (runs the model comparison).
+- `main` of the fork was never touched.
+
+## Open
+
+- Glass: the owner's Mac shows a solid window. The "Window look" line (now back in Settings > More, also in the app log) should say why; not yet read.
+- System audio: "No system audio was heard" on the owner's Mac; needs the owner to allow System Audio Recording and run the audio test again.
+- First start of the engine can take tens of seconds (it unpacks every time); if it stays slow, ship it unpacked inside the app.
+- Not yet tested on a real Mac: the new Connect screen, the link, sign-in, starting a live meeting end to end.
+- Backtale side waiting on the server: `GET /api/live-meetings/whoami` on staging (the app waits and retries); account endpoints (`/api/device/*`) not built.
+- Unsigned builds: macOS blocks them until Open Anyway; signing and notarization need the owner's Apple Developer decision.
+- Not started: the on-screen "Questions to ask" overlay (stub exists, hidden), Windows and Linux parity.
+
+## First three things to do when resumed
+
+1. Check the state of the last builds of `claude/ui-v2` (Actions) and that `build-latest` holds a build that matches the branch head; fix anything red from the logs.
+2. Get the owner's readings from the Mac (Window look line, Reduce transparency, system audio test, Connect flow) and fix the glass and audio problems from them.
+3. Test connect, start listening and a live meeting against staging once `whoami` is live, then build the questions overlay against the agreed suggestions feed.
+
+---
+
 # Working notes: Backtale Companion
 
 Running notes for the working session. Not user-facing; kept short and updated after each milestone.
